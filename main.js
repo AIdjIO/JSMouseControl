@@ -46,6 +46,8 @@ document.addEventListener('DOMContentLoaded',()=>{
         var mousePos = getMousePosition(myCanvas, e)
         // myCtx.lineWidth = 10;
         myCtx.lineCap="round";
+        myCtx.lineJoin = "bevel";
+        // myCtx.miterLimit = 5;
         myCtx.lineTo(mousePos.x, mousePos.y)
         myCtx.stroke()
     }
