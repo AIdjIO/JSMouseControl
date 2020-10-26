@@ -3,12 +3,26 @@ document.addEventListener('DOMContentLoaded',()=>{
     const lineColor = document.getElementById("lineColor");
     const lineOpacity = document.getElementById("rangeOpacity");
     const lineThickness = document.getElementById("rangeThickness");
-    const myCanvas = document.getElementById("mousePad");
-    const myCtx = myCanvas.getContext("2d");
+    const btnClearCanvas = document.getElementById("btnClearCanvas")
+    let myCanvas = document.getElementById("scratchPad");
+    let myCtx = myCanvas.getContext("2d");
 
+    resizeCanvas();
     //resizing canvas (minus border with times 2)
-    myCanvas.height = window.innerHeight-70;
+    function resizeCanvas(){
+        // Make our in-memory canvas
+    var backUpCanvas = document.createElement('canvas');
+    var backUpCtx = backUpCanvas.getContext('2d');
+
+    backUpCanvas.width = myCanvas.width;
+    backUpCanvas.height = myCanvas.height;
+    backUpCtx.drawImage(myCanvas, 0, 0);
+    
+    myCanvas.height = window.innerHeight-2;
     myCanvas.width = window.innerWidth-2;
+
+    myCtx.drawImage(backUpCanvas, 0, 0);
+    };
 
     //variable
     let painting = false;
@@ -54,6 +68,14 @@ document.addEventListener('DOMContentLoaded',()=>{
         myCtx.lineWidth = lineThickness
     }
 
+    function clearCanvas(canvas){
+        console.log("click")
+        boundingBoxCoord = myCanvas.getBoundingClientRect();
+        console.log(boundingBoxCoord.left,boundingBoxCoord.top,myCanvas.width, myCanvas.height)
+        myCtx.clearRect(boundingBoxCoord.left,boundingBoxCoord.top,myCanvas.width, myCanvas.height)
+        myCtx.clearRect(20, 20, 100, 50);
+    }
+
 
     function getMousePosition(canvas,e){
         var canvasBoundingBox = canvas.getBoundingClientRect();
@@ -70,4 +92,8 @@ document.addEventListener('DOMContentLoaded',()=>{
     lineColor.addEventListener("input",color) 
     lineOpacity.addEventListener("input",opacity) 
     lineThickness.addEventListener("input", thickness)
+    btnClearCanvas.addEventListener("click", clearCanvas)
+
+    //resize canvas on window resize
+    window.addEventListener("resize", resizeCanvas);
 })
